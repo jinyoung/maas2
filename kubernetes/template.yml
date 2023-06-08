@@ -1,0 +1,228 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Reservation Management
+  labels:
+    app: Reservation Management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Reservation Management
+  template:
+    metadata:
+      labels:
+        app: Reservation Management
+    spec:
+      containers:
+        - name: Reservation Management
+          image: username/Reservation Management:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Customer Service and Support
+  labels:
+    app: Customer Service and Support
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Customer Service and Support
+  template:
+    metadata:
+      labels:
+        app: Customer Service and Support
+    spec:
+      containers:
+        - name: Customer Service and Support
+          image: username/Customer Service and Support:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Transportation Services Integration
+  labels:
+    app: Transportation Services Integration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Transportation Services Integration
+  template:
+    metadata:
+      labels:
+        app: Transportation Services Integration
+    spec:
+      containers:
+        - name: Transportation Services Integration
+          image: username/Transportation Services Integration:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Data Analytics and Feedback
+  labels:
+    app: Data Analytics and Feedback
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Data Analytics and Feedback
+  template:
+    metadata:
+      labels:
+        app: Data Analytics and Feedback
+    spec:
+      containers:
+        - name: Data Analytics and Feedback
+          image: username/Data Analytics and Feedback:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: Reservation Management
+  labels:
+    app: Reservation Management
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: Reservation Management
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: Customer Service and Support
+  labels:
+    app: Customer Service and Support
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: Customer Service and Support
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: Transportation Services Integration
+  labels:
+    app: Transportation Services Integration
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: Transportation Services Integration
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: Data Analytics and Feedback
+  labels:
+    app: Data Analytics and Feedback
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: Data Analytics and Feedback
+

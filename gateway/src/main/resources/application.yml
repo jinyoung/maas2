@@ -1,0 +1,82 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: Reservation Management
+          uri: http://localhost:8082
+          predicates:
+            - Path=/reservations/**, 
+        - id: Customer Service and Support
+          uri: http://localhost:8083
+          predicates:
+            - Path=/feedbacks/**, /assistanceRequests/**, 
+        - id: Transportation Services Integration
+          uri: http://localhost:8085
+          predicates:
+            - Path=/passengerLocations/**, /driverNotifications/**, 
+        - id: Data Analytics and Feedback
+          uri: http://localhost:8088
+          predicates:
+            - Path=/assistanceStatistics/**, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: Reservation Management
+          uri: http://reservationManagement:8080
+          predicates:
+            - Path=/reservations/**, 
+        - id: Customer Service and Support
+          uri: http://customerServiceAndSupport:8080
+          predicates:
+            - Path=/feedbacks/**, /assistanceRequests/**, 
+        - id: Transportation Services Integration
+          uri: http://transportationServicesIntegration:8080
+          predicates:
+            - Path=/passengerLocations/**, /driverNotifications/**, 
+        - id: Data Analytics and Feedback
+          uri: http://dataAnalyticsAndFeedback:8080
+          predicates:
+            - Path=/assistanceStatistics/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
