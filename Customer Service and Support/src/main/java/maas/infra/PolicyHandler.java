@@ -24,4 +24,19 @@ public class PolicyHandler {
 
     @StreamListener(KafkaProcessor.INPUT)
     public void whatever(@Payload String eventString) {}
+
+    @StreamListener(
+        value = KafkaProcessor.INPUT,
+        condition = "headers['type']=='ReservationMade'"
+    )
+    public void wheneverReservationMade_AutoFeedback(
+        @Payload ReservationMade reservationMade
+    ) {
+        ReservationMade event = reservationMade;
+        System.out.println(
+            "\n\n##### listener AutoFeedback : " + reservationMade + "\n\n"
+        );
+        // Sample Logic //
+
+    }
 }

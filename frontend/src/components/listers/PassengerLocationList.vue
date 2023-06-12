@@ -101,7 +101,7 @@
             this.newValue = {
                 'passengerName': '',
                 'currentLocation': '',
-                'locationLastUpdate': '2023-06-08',
+                'locationLastUpdate': '2023-06-12',
             }
         },
         methods: {

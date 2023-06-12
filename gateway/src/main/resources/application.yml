@@ -1,29 +1,38 @@
-server:
+server:
   port: 8088
 
 ---
 
+
+keycloak-client:
+  server-url: http://localhost:9090
+  realm: master
+
 spring:
-  profiles: default
+  config:
+    activate:
+      on-profile: default
   cloud:
     gateway:
+      default-filters:
+        - TokenRelay 
       routes:
         - id: Reservation Management
           uri: http://localhost:8082
           predicates:
-            - Path=/reservations/**, 
+            - Path=/reservations/** 
         - id: Customer Service and Support
           uri: http://localhost:8083
           predicates:
-            - Path=/feedbacks/**, /assistanceRequests/**, 
+            - Path=/feedbacks/**/assistanceRequests/** 
         - id: Transportation Services Integration
           uri: http://localhost:8085
           predicates:
-            - Path=/passengerLocations/**, /driverNotifications/**, 
+            - Path=/passengerLocations/**/driverNotifications/** 
         - id: Data Analytics and Feedback
           uri: http://localhost:8088
           predicates:
-            - Path=/assistanceStatistics/**, 
+            - Path=/assistanceStatistics/** 
         - id: frontend
           uri: http://localhost:8080
           predicates:
@@ -31,42 +40,73 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins:
+            allowedOriginPatterns:
               - "*"
             allowedMethods:
               - "*"
             allowedHeaders:
               - "*"
             allowCredentials: true
-
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: "<client-id>"
+            client-secret: 
+            redirect-uri: "gateway-path/login/oauth2/code/client-name"
+            authorization-grant-type: authorization_code
+            scope: openid
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}/protocol/openid-connect/certs
 
 ---
 
 spring:
-  profiles: docker
+  config:
+    activate:
+      on-profile: docker
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            client-id: "<client-id>"
+            client-secret: 
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+            authorization-grant-type: authorization_code
+            scope: openid
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}/protocol/openid-connect/certs
   cloud:
     gateway:
       routes:
         - id: Reservation Management
-          uri: http://reservationManagement:8080
+          uri: http://Reservation Management:8080
           predicates:
-            - Path=/reservations/**, 
+            - Path=/reservations/** 
         - id: Customer Service and Support
-          uri: http://customerServiceAndSupport:8080
+          uri: http://Customer Service and Support:8080
           predicates:
-            - Path=/feedbacks/**, /assistanceRequests/**, 
+            - Path=/feedbacks/**/assistanceRequests/** 
         - id: Transportation Services Integration
-          uri: http://transportationServicesIntegration:8080
+          uri: http://Transportation Services Integration:8080
           predicates:
-            - Path=/passengerLocations/**, /driverNotifications/**, 
+            - Path=/passengerLocations/**/driverNotifications/** 
         - id: Data Analytics and Feedback
-          uri: http://dataAnalyticsAndFeedback:8080
+          uri: http://Data Analytics and Feedback:8080
           predicates:
-            - Path=/assistanceStatistics/**, 
-        - id: frontend
-          uri: http://frontend:8080
-          predicates:
-            - Path=/**
+            - Path=/assistanceStatistics/** 
       globalcors:
         corsConfigurations:
           '[/**]':

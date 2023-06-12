@@ -39,6 +39,8 @@ public class Reservation {
     public void cancelReservation(
         CancelReservationCommand cancelReservationCommand
     ) {
+        //implement business logic here:
+
         ReservationCancelled reservationCancelled = new ReservationCancelled(
             this
         );
